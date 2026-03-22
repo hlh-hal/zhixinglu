@@ -2,16 +2,19 @@ import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 import path from 'path';
 
-// Load env vars, searching upwards or in specific path if needed
-// Assuming .env is in project root (../.env from server/ directory)
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
-dotenv.config({ path: path.resolve(process.cwd(), '.env.example') }); // Fallback if .env not created yet
+// Load env vars only in local development
+if (!process.env.VERCEL) {
+  dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+}
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
+const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
-if (!supabaseUrl || !supabaseServiceKey) {
-  console.warn('WARNING: VITE_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is not defined.');
+if (!supabaseUrl) {
+  console.warn('WARNING: SUPABASE_URL is not defined.');
+}
+if (!supabaseServiceKey) {
+  console.warn('WARNING: SUPABASE_SERVICE_ROLE_KEY is not defined.');
 }
 
 // Create a Supabase client with the service role key.
