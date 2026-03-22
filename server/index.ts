@@ -33,6 +33,11 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   res.status(500).json({ error: 'Internal Server Error', message: err.message });
 });
 
-app.listen(port, () => {
-  console.log(`Backend server running on http://localhost:${port}`);
-});
+// For Vercel, we need to export the app
+export default app;
+
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(port, () => {
+    console.log(`Backend server running on http://localhost:${port}`);
+  });
+}
