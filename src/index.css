@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4A90D9;
+  --color-surface: #f9f9f9;
+  --color-on-surface: #1a1c1c;
+  --color-surface-container: #eeeeee;
+  --color-surface-container-low: #f3f3f3;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-highest: #e2e2e2;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-outline-variant: #c1c7d2;
+  --color-on-surface-variant: #414751;
+  --font-headline: "Manrope", "PingFang SC", sans-serif;
+  --font-body: "Inter", "PingFang SC", sans-serif;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .editorial-shadow {
+    box-shadow: 0px 20px 40px rgba(26, 28, 28, 0.06);
+  }
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
