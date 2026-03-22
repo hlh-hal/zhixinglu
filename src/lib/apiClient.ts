@@ -42,17 +42,24 @@ async function request<T>(method: ApiMethod, endpoint: string, options: RequestO
     headers.set('Authorization', `Bearer ${session.access_token}`);
   }
 
-  const response = await fetch(endpoint, {
-    ...restOptions,
-    method,
-    headers,
-    body: body == null ? undefined : isFormData ? body : JSON.stringify(body),
-  });
+  const contentType = response.headers.get('Content-Type') ?? '';
+  let payload: any = null;
 
-  const rawText = await response.text();
-  const payload = rawText ? JSON.parse(rawText) : null;
+  if (contentType.includes('application/json')) {
+    try {
+      const rawText = await response.text();
+      payload = rawText ? JSON.parse(rawText) : null;
+    } catch (err) {
+      console.error('JSON parse error:', err);
+    }
+  }
 
   if (!response.ok) {
+    // If not OK and it's an HTML page (likely 404/500), provide a better error
+    if (!contentType.includes('application/json')) {
+      throw new ApiError(`服务器接口异常 (${response.status}): 请检查后端服务是否正确运行`, response.status);
+    }
+
     const message =
       payload?.error ||
       payload?.message ||
