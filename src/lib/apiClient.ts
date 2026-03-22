@@ -42,6 +42,13 @@ async function request<T>(method: ApiMethod, endpoint: string, options: RequestO
     headers.set('Authorization', `Bearer ${session.access_token}`);
   }
 
+  const response = await fetch(endpoint, {
+    ...restOptions,
+    method,
+    headers,
+    body: body == null ? undefined : isFormData ? body : JSON.stringify(body),
+  });
+
   const contentType = response.headers.get('Content-Type') ?? '';
   let payload: any = null;
 
