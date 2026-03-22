@@ -12,10 +12,14 @@ router.get('/', requireAuth, async (req, res) => {
       .eq('user_id', req.user.id)
       .order('created_at', { ascending: false });
 
-    if (error) throw error;
-    res.json(data);
+    if (error) {
+      console.warn('Database error in notifications route:', error.message);
+      return res.json([]); // 数据库报错时返回空列表而非 500
+    }
+    res.json(data || []);
   } catch (error: any) {
-    res.status(500).json({ error: error.message });
+    console.error('Unhandled error in notifications route:', error);
+    res.json([]); // 兜底返回空列表
   }
 });
 
